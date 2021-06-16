@@ -68,9 +68,9 @@ class DBWNode(object):
         self.dbw_enabled = None
         self.linear_vel = None
         self.angular_vel = None
-        self.throttle = None
-        self.brake = None
-        self.steering = None
+        self.throttle = 0
+        self.brake = 0
+        self.steering = 0
 
         self.loop()
 

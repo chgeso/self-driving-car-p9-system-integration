@@ -15,10 +15,10 @@ class Controller(object):
         self.yaw_controller = YawController(wheel_base, steer_ratio, 0.1, max_lat_accel, max_steer_angle)
 
         kp = 0.3
-        ki = 0.1
-        kd = 0.
+        ki = 0.1 
+        kd = 0.0 
         mn = 0. # Minimum throttle value
-        mx = 0.2 # Maximum throttle value
+        mx = accel_limit # Maximum throttle value
         self.throttle_controller = PID(kp, ki, kd, mn, mx)
 
         tau = 0.5 # 1/(2pi*tau) = cutoff frequency
@@ -31,8 +31,9 @@ class Controller(object):
         self.decel_limit = decel_limit
         self.accel_limit = accel_limit
         self.wheel_radius = wheel_radius
-
+        
         self.last_time = rospy.get_time()
+        self.last_vel = 0
 
     def control(self, current_vel, dbw_enabled, linear_vel, angular_vel):
         # TODO: Change the arg, kwarg list to suit your needs
@@ -53,7 +54,7 @@ class Controller(object):
         self.last_time = current_time
 
         throttle = self.throttle_controller.step(vel_error, sample_time)
-        brake = 0
+        brake = 0.0
 
         if linear_vel == 0. and current_vel < 0.1:
             throttle = 0
